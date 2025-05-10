@@ -58,9 +58,53 @@
       border-radius: 1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .imagem-destaque a {
-      text-decoration: none;
+    /* Mini Jogo: Memória */
+    .game { text-align: center; }
+    #memory-board {
+      display: grid;
+      grid-template-columns: repeat(4, 60px);
+      grid-gap: 10px;
+      justify-content: center;
+      margin: 1rem 0;
     }
+    .card {
+      width: 60px;
+      height: 60px;
+      background: #d2691e;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      cursor: pointer;
+      position: relative;
+      transform: perspective(600px) rotateY(0deg);
+      transform-style: preserve-3d;
+      transition: transform 0.4s;
+    }
+    .card.flipped {
+      transform: perspective(600px) rotateY(180deg);
+    }
+    .card .front,
+    .card .back {
+      position: absolute;
+      width: 100%; height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card .front {
+      background: #fff;
+      transform: rotateY(180deg);
+      font-size: 1.5rem;
+    }
+    .card .back {
+      background: #d2691e;
+      color: #fff;
+    }
+    .status { margin-top: 0.5rem; font-size: 1rem; }
     .spotify {
       text-align: center;
     }
@@ -128,6 +172,12 @@
     </a>
   </section>
 
+  <section class="game">
+    <h2>Mini Jogo: Memória de Aniversário</h2>
+    <div id="memory-board"></div>
+    <p class="status">Movimentos: <span id="moves">0</span></p>
+  </section>
+
   <section class="spotify">
     <h2>Ouça Nossa Playlist</h2>
     <iframe
@@ -142,6 +192,47 @@
   </footer>
 
   <script>
+    // Memory Game JS
+    (function() {
+      const board = document.getElementById('memory-board');
+      const movesCounter = document.getElementById('moves');
+      const icons = ['🎂','🎈','🎁','🎉'];
+      let cards = icons.concat(icons);
+      let moves = 0, flipped = [], matched = 0;
+      // shuffle
+      cards = cards.sort(() => 0.5 - Math.random());
+      // build board
+      cards.forEach(icon => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="front">${icon}</div>
+          <div class="back">?</div>
+        `;
+        board.appendChild(card);
+        card.addEventListener('click', () => {
+          if (flipped.length < 2 && !card.classList.contains('flipped')) {
+            card.classList.add('flipped');
+            flipped.push(card);
+            if (flipped.length === 2) {
+              moves++;
+              movesCounter.textContent = moves;
+              if (flipped[0].querySelector('.front').textContent === flipped[1].querySelector('.front').textContent) {
+                matched += 2;
+                flipped = [];
+                if (matched === cards.length) alert('Parabéns! Você completou o jogo em ' + moves + ' movimentos!');
+              } else {
+                setTimeout(() => {
+                  flipped.forEach(c => c.classList.remove('flipped'));
+                  flipped = [];
+                }, 800);
+              }
+            }
+          }
+        });
+      });
+    })();
+
     // Confetti simples
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
@@ -181,4 +272,3 @@
   </script>
 </body>
 </html>
-
