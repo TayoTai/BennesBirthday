@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Aniversário, Minha Princesa!</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Patrick Hand', cursive;
+      background: linear-gradient(135deg, #ffe4e1, #ffebcd);
+      color: #333;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+    header h1 {
+      font-family: 'Lobster', cursive;
+      font-size: 3rem;
+      color: #d2691e;
+      text-shadow: 2px 2px rgba(255,255,255,0.6);
+    }
+    header p.subtitle {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      color: #a0522d;
+    }
+    section {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    section h2 {
+      font-family: 'Lobster', cursive;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #d2691e;
+      text-align: center;
+    }
+    .poem p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .imagem-destaque img {
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .imagem-destaque a {
+      text-decoration: none;
+    }
+    .spotify {
+      text-align: center;
+    }
+    .spotify iframe {
+      border: none;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 300px;
+      height: 380px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 1rem;
+      color: #8b4513;
+    }
+    /* Heart animation */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 105, 180, 0.7);
+      transform: rotate(45deg);
+      animation: float 5s infinite ease-in;
+    }
+    .heart:after,
+    .heart:before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 105, 180, 0.7);
+      border-radius: 50%;
+    }
+    .heart:before { top: -10px; left: 0; }
+    .heart:after { left: 10px; top: 0; }
+    @keyframes float {
+      0% { transform: translate(0, 0) rotate(45deg); opacity: 1; }
+      100% { transform: translate(-20px, -200px) rotate(45deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <canvas id="confetti-canvas"></canvas>
+    <h1>Feliz Aniversário, Minha Princesa!</h1>
+    <p class="subtitle">Você nasceu em 09/05, iluminando nossas vidas.</p>
+  </header>
+
+  <section class="poem">
+    <h2>Poema Especial</h2>
+    <p>Ontem as estrelas dançaram pra você,</p>
+    <p>Hoje o sol sorri ao te ver crescer.</p>
+    <p>Minha flor de luz e encanto sem fim,</p>
+    <p>Teu riso é melodia que faz bem a mim.</p>
+    <p>Mesmo um dia atrasado, meu verso é verdadeiro,</p>
+    <p>Teu brilho é eterno no nosso universo inteiro.</p>
+  </section>
+
+  <section class="imagem-destaque">
+    <h2>Minha Menina</h2>
+    <a href="https://i.imgur.com/v8KC1zA.jpeg" target="_blank">
+      <img src="https://i.imgur.com/v8KC1zA.jpeg" alt="Foto da minha filha" />
+    </a>
+  </section>
+
+  <section class="spotify">
+    <h2>Ouça Nossa Playlist</h2>
+    <iframe src="https://open.spotify.com/playlist/2WhX7RhStSME7NEXifqJv2?si=X1ty14iXQd2E60p6KCW84Q&pi=Nk7EyBikSoWJo" allow="encrypted-media"></iframe>
+  </section>
+
+  <footer>
+    &copy; 2025 Com amor, Papai 💖
+  </footer>
+
+  <script>
+    // Confetti simples
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const confettis = [];
+    function random(min, max) { return Math.random() * (max - min) + min; }
+    function createConfetti() {
+      confettis.push({ x: random(0, canvas.width), y: -10, r: random(5, 10), d: random(10, 30) });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettis.forEach((f, i) => {
+        ctx.fillStyle = 'rgba(255, 105, 180,' + random(0.7, 1) + ')';
+        ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+        f.y += Math.cos(f.d) + 2;
+        f.x += Math.sin(f.d);
+        if (f.y > canvas.height) confettis.splice(i, 1);
+      });
+      if (confettis.length < 100) createConfetti();
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Corações flutuantes
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.animationDuration = random(4, 8) + 's';
+      heart.style.width = random(10, 20) + 'px';
+      heart.style.height = heart.style.width;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+    setInterval(createHeart, 500);
+  </script>
+</body>
+</html>
+
